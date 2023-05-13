@@ -1,19 +1,28 @@
-using System;
-using SentryVision.HubApi.Modules;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace SentryVision.HubApi
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Configuration.AddXmlFile("tokens.xml", false, true);
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-            var app = builder.Build();
-            
-            app.MapGet("/", () => "Hello SentryVision!");
-            app.MapGet("/rtspPaths", Rtsp.GetRtspStreams);
-            
-            app.Run();
-        }
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+// Before running the API, ensure some crucial files exist
+
+app.Run();

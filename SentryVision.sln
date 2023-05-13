@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentryVision.Endpoint", "SentryVision.Endpoint\SentryVision.Endpoint.csproj", "{46937CDD-E050-48AE-A73A-C58ED89DE67D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentryVision.HubApi", "SentryVision.HubApi\SentryVision.HubApi.csproj", "{ACED0744-D58E-4045-810D-B88F0A071FE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentryVision.HubApi", "SentryVision.HubApi\SentryVision.HubApi.csproj", "{0CA8E4A7-0B14-48B8-BEE0-28AD2653FF8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		{46937CDD-E050-48AE-A73A-C58ED89DE67D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46937CDD-E050-48AE-A73A-C58ED89DE67D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46937CDD-E050-48AE-A73A-C58ED89DE67D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACED0744-D58E-4045-810D-B88F0A071FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACED0744-D58E-4045-810D-B88F0A071FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACED0744-D58E-4045-810D-B88F0A071FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACED0744-D58E-4045-810D-B88F0A071FE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CA8E4A7-0B14-48B8-BEE0-28AD2653FF8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CA8E4A7-0B14-48B8-BEE0-28AD2653FF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CA8E4A7-0B14-48B8-BEE0-28AD2653FF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CA8E4A7-0B14-48B8-BEE0-28AD2653FF8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
