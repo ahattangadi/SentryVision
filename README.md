@@ -1,4 +1,5 @@
-# SentryVision
+![SentryVision](images/banner.png)
+
 An IoT based, open-source, camera-feed system.
 
 ## Features
@@ -17,3 +18,24 @@ The web interface is designed to be a simple, easy to use interface for the user
 All these are modular and can be swapped out with another solution, as long it does not include any breaking changes (unless they are dealt with in the other components as well).
 
 ![systems_design.png](images%2Fsystems_design.png)
+
+---
+
+## Authentication
+The authentication system is a token based system. The server generates a token and stores it in a database. The server's authentication endpoint is registered as an external authentication handler in the MediaMTX server which is being used to take in the RTSP streams. Whenever the endpoint wishes to connect to the server, it sends a request to the MediaMTX server with the token. The MediaMTX server forwards the authentication request to the Hub Server which then checks if the token is valid and if it is, it allows the endpoint to connect to the server. This token is then used to authenticate the endpoint for all future requests.
+![authentication.png](images/authentication.png)
+- [ ] In the future, a function that binds an endpoint to the token may be introduced, to ensure that a token can only be used by the endpoint it was first used by, to prevent token theft.
+
+---
+## Databases
+The server uses a SQLite database to store data.
+Currently, the tokens are stored in a table called `Tokens` with the following schema:
+```sql
+CREATE TABLE Tokens
+(
+    Id           integer primary key autoincrement,
+    CreationTime integer not null,
+    AccessToken  TEXT    not null
+);
+```
+It is being accessed using the Entity Framework Core ORM.
