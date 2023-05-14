@@ -26,6 +26,33 @@ The authentication system is a token based system. The server generates a token 
 ![authentication.png](images/authentication.png)
 - [ ] In the future, a function that binds an endpoint to the token may be introduced, to ensure that a token can only be used by the endpoint it was first used by, to prevent token theft.
 
+The endpoint `api/Auth` accepts both `GET` and `POST` requests.
+
+**`GET`<br>**
+The `GET` request is used to get all token from the server.
+
+**`POST` <br>**
+The `POST` request is used to verify a token and authenticate the user. It takes a payload with the schema
+```json
+{
+  "ip": "string",
+  "user": "string",
+  "password": "string",
+  "path": "string",
+  "protocol": "string",
+  "id": "string",
+  "action": "string",
+  "query": "string"
+}
+```
+The `password` field is used to supply the token (it is named `password` to comply with the request that MediaMTX sends). <br>
+Case | Response Code
+---|---
+Valid Token | 200
+Invalid Token | 403
+No Token | 401
+Edge Case | 500
+
 ---
 ## Databases
 The server uses a SQLite database to store data.
@@ -39,3 +66,5 @@ CREATE TABLE Tokens
 );
 ```
 It is being accessed using the Entity Framework Core ORM.
+
+The database int the repository is a *sample database* with a single token in it. It is **NOT** used in the actual server.
