@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
@@ -27,6 +28,7 @@ namespace SentryVision.HubApi.Controllers
 
         // GET: api/Auth
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<List<Token>> Get()
         {
             // TODO: Add authentication to ensure only the server owner can access this endpoint
@@ -37,6 +39,7 @@ namespace SentryVision.HubApi.Controllers
         // POST: api/Auth
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] AuthPayload payload)
         {
             string token = payload.password;
