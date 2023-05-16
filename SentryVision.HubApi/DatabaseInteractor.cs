@@ -15,5 +15,6 @@ public class DatabaseInteractor : DbContext
     }
     
     public DbSet<Token> Tokens { get; set; }
+    public DbSet<User> Users { get; set; }
     
 }

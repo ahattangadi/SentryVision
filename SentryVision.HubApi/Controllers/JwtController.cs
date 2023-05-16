@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SentryVision.HubApi.Models;
 
@@ -18,18 +19,23 @@ namespace SentryVision.HubApi.Controllers
     {
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
+        private readonly DatabaseInteractor _databaseInteractor;
 
-        public JwtController(ILogger<JwtController> logger, IConfiguration configuration)
+        public JwtController(ILogger<JwtController> logger, IConfiguration configuration, DatabaseInteractor databaseInteractor)
         {
             _logger = logger;
             _configuration = configuration;
+            _databaseInteractor = databaseInteractor;
         }
         
         [HttpGet]
 
-        public IResult Get([FromBody] User jwtUser)
+        public async Task<IResult> Get([FromBody] User jwtUser)
         {
-            if (jwtUser.Username == _configuration.GetValue<string>("UserCredentials:Username") && jwtUser.Password == _configuration.GetValue<string>("UserCredentials:Password"))
+            string[] _users = await _databaseInteractor.Users.Select(u => u.Username).ToArrayAsync();
+            string[] _passwords = await _databaseInteractor.Users.Select(p => p.Password).ToArrayAsync();
+            
+            if (_users.Contains(jwtUser.Username) && _passwords.Contains(jwtUser.Password))
             {
               var issuer = _configuration.GetValue<string>("Jwt:Issuer");
               var audience = _configuration.GetValue<string>("Jwt:Audience");
