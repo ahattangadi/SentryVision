@@ -54,6 +54,18 @@ Invalid Token | 403
 No Token | 401
 Edge Case | 500
 
+### Generating Tokens
+The endpoint `/api/Auth/generateToken` can be used to generate a new token. A `POST` request is made to create a new token.
+The `POST` request requires no body. This endpoint requries a JWT Bearer Token to be accessed. 
+On successful request, a new token is generated and added to the SQLite database after being hashed using the SHA-256 algorithm.
+Case | Response Code
+---|---
+Token Generated | 200
+Error | 500
+Invalid JWT Token | 401
+
+If the response is 200, the token is provided along with it.
+
 ---
 ## Authentication (API)
 The HubAPI has certain protected endpoints which required a JWT Bearer Token to be accessed.
@@ -86,5 +98,15 @@ CREATE TABLE Tokens
     Id           integer primary key autoincrement,
     CreationTime integer not null,
     AccessToken  TEXT    not null
+);
+```
+
+**Users**
+```sql
+CREATE TABLE Users
+(
+    Id       integer primary key autoincrement,
+    Username TEXT    not null,
+    Password TEXT    not null
 );
 ```
