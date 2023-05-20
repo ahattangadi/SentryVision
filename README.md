@@ -17,7 +17,7 @@ The web interface is designed to be a simple, easy to use interface for the user
 
 All these are modular and can be swapped out with another solution, as long it does not include any breaking changes (unless they are dealt with in the other components as well).
 
-![systems_design.png](images%2Fsystems_design.png)
+![systems_design.png](images/systems_design.png)
 
 ---
 
@@ -80,6 +80,49 @@ The response will be a JWT token which can be used to access the protected endpo
 
 To access the protected endpoints, the token must be sent along with the request. Incase the authentication fails, a `401` response will be sent.
 
+---
+## User Management
+The HubAPI has a user management system which can be used to create, delete, and modify users. The endpoints are protected and require a JWT Bearer Token to be accessed.
+The endpoint `/api/User` accepts `GET`, `POST`, `PUT` and `DELETE` requests.
+
+### Get all users
+A `GET` request to `/api/User` will return a list of all users in the database.
+Response schema:
+```json
+[
+  "string",
+  "string",
+  ...
+]
+```
+
+### Add a new user
+A `POST` request to `/api/User` will add a new user to the database. The body must include a username and password in the following format:
+```json
+{
+  "userName": "string",
+  "password": "string"
+}
+```
+
+### Update a user
+A `PUT` request to `/api/User` will update a user in the database. The body must include a body with the schema of:
+```json
+{
+  "UserToChange": {
+    "userName": "string",
+    "password": "string"
+  },
+  "Action": "updateUname | updatePwd",
+  "ReplacedField": "string"
+}
+```
+
+### Delete a user
+A `DELETE` request to `/api/User` will delete a user from the database. The body must include the username of the user to be deleted in the following format:
+```json
+"string"
+```
 
 ---
 ## Databases

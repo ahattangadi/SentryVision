@@ -50,7 +50,7 @@ namespace SentryVision.HubApi.Controllers
                       new Claim(JwtRegisteredClaimNames.Email, jwtUser.Username),
                       new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                   }),
-                  Expires = DateTime.UtcNow.AddMinutes(5),
+                  Expires = DateTime.UtcNow.AddHours(1),
                   Issuer = issuer,
                   Audience = audience,
                   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
