@@ -84,6 +84,7 @@ To access the protected endpoints, the token must be sent along with the request
 ## User Management
 The HubAPI has a user management system which can be used to create, delete, and modify users. The endpoints are protected and require a JWT Bearer Token to be accessed.
 The endpoint `/api/User` accepts `GET`, `POST`, `PUT` and `DELETE` requests.
+The user executing the request must have the `superadmin` role to perform these actions.
 
 ### Get all users
 A `GET` request to `/api/User` will return a list of all users in the database.
@@ -101,8 +102,8 @@ A `POST` request to `/api/User` will add a new user to the database. The body mu
 ```json
 {
   "userName": "string",
-  "password": "string"
-}
+  "password": "string",
+  "role": "string"
 ```
 
 ### Update a user
@@ -151,5 +152,6 @@ CREATE TABLE Users
     Id       integer primary key autoincrement,
     Username TEXT    not null,
     Password TEXT    not null
+    Role     TEXT    required, not null
 );
 ```

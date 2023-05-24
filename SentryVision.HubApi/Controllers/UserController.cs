@@ -6,6 +6,7 @@ using SentryVision.HubApi.Models;
 namespace SentryVision.HubApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer", Roles = UserRoles.Superadmin)]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -19,7 +20,6 @@ namespace SentryVision.HubApi.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<List<string>> Get()
         {
             _logger.LogInformation("{Time}: Getting all users from database", DateTimeOffset.UtcNow);
@@ -28,14 +28,13 @@ namespace SentryVision.HubApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Post([FromBody] User payload)
         {
             _logger.LogInformation("{Time}: Received user creation request from {ip}", DateTimeOffset.UtcNow, HttpContext.Connection.RemoteIpAddress);
             
-            if (String.IsNullOrEmpty(payload.Username) || String.IsNullOrEmpty(payload.Password))
+            if (String.IsNullOrEmpty(payload.Username) || String.IsNullOrEmpty(payload.Password) || String.IsNullOrEmpty(payload.Role))
             {
-                _logger.LogError("{Time}: No username or password provided by {ip}", DateTimeOffset.UtcNow, HttpContext.Connection.RemoteIpAddress);
+                _logger.LogError("{Time}: No username, password, or role provided by {ip}", DateTimeOffset.UtcNow, HttpContext.Connection.RemoteIpAddress);
                 return StatusCode(401);
             }
             else
@@ -51,7 +50,8 @@ namespace SentryVision.HubApi.Controllers
                     User hashedPayload = new User
                     {
                         Username = payload.Username,
-                        Password = Modules.Sha256.GenerateSha256(payload.Password)
+                        Password = Modules.Sha256.GenerateSha256(payload.Password),
+                        Role = payload.Role
                     };
                     
                     await _dbInteractor.Users.AddAsync(hashedPayload);
@@ -62,7 +62,7 @@ namespace SentryVision.HubApi.Controllers
         }
 
         [HttpPut]
-        [Authorize(AuthenticationSchemes = "Bearer")]
+
         public async Task<IActionResult> Put([FromBody] UserUpdatePayload payload)
         {
             _logger.LogInformation("{Time}: Received user update request from {ip}", DateTimeOffset.UtcNow, HttpContext.Connection.RemoteIpAddress);
@@ -109,7 +109,6 @@ namespace SentryVision.HubApi.Controllers
         }
 
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Delete([FromBody] String userName)
         {
             _logger.LogInformation("{Time}: Received user deletion request from {ip}", DateTimeOffset.UtcNow, HttpContext.Connection.RemoteIpAddress);

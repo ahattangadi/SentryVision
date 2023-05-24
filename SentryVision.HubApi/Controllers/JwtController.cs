@@ -30,17 +30,18 @@ namespace SentryVision.HubApi.Controllers
         
         [HttpGet]
 
-        public async Task<IResult> Get([FromBody] User jwtUser)
+        public async Task<IResult> Get([FromBody] RolelessUser jwtUser)
         {
             string[] _users = await _databaseInteractor.Users.Select(u => u.Username).ToArrayAsync();
             string[] _passwords = await _databaseInteractor.Users.Select(p => p.Password).ToArrayAsync();
             
-            if (_users.Contains(jwtUser.Username) && _passwords.Contains(jwtUser.Password))
+            if (_users.Contains(jwtUser.Username) && _passwords.Contains(Modules.Sha256.GenerateSha256(jwtUser.Password)))
             {
               var issuer = _configuration.GetValue<string>("Jwt:Issuer");
               var audience = _configuration.GetValue<string>("Jwt:Audience");
               var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("Jwt:Key"));
 
+              string role = await _databaseInteractor.Users.Where(u => u.Username == jwtUser.Username).Select(r => r.Role).FirstOrDefaultAsync();
               var tokenDescriptor = new SecurityTokenDescriptor
               {
                   Subject = new ClaimsIdentity(new[]
@@ -48,7 +49,8 @@ namespace SentryVision.HubApi.Controllers
                       new Claim("Id", Guid.NewGuid().ToString()),
                       new Claim(JwtRegisteredClaimNames.Sub, jwtUser.Username),
                       new Claim(JwtRegisteredClaimNames.Email, jwtUser.Username),
-                      new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                      new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                      new Claim(ClaimTypes.Role, role)
                   }),
                   Expires = DateTime.UtcNow.AddHours(1),
                   Issuer = issuer,
